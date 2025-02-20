@@ -53,7 +53,7 @@ const getActiveSession = () => {
 };
 
 function App() {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(window.innerWidth >= 1024);
   const [sessions, setSession] = useState(getDefaultSessions());
   const [activeSession, setActiveSession] = useState(getActiveSession());
   const [messages, setMessages] = useState(getSessionMessages(activeSession));
@@ -236,7 +236,7 @@ function App() {
 
         <nav
           className={cn(
-            "w-full max-w-[250px] transition-all overflow-hidden duration-300 bg-gray-100 border-r border-gray-100 p-5",
+            "w-full max-w-[250px] fixed top-[76px] left-0 lg:static h-full z-10 transition-all overflow-hidden duration-300 bg-gray-100 border-r border-gray-100 p-5",
             {
               "!w-[0px] !max-w-[0px] !p-0": !isSidebarOpen,
             }
@@ -275,7 +275,7 @@ function App() {
             <div className="absolute inset-0 bg-white/94">
               <div className=" flex w-full h-full flex-col p-5">
                 <div
-                  className="w-full grow h-fit p-5 overflow-y-auto flex"
+                  className="w-full grow h-fit md:p-5 overflow-y-auto flex"
                   style={{ flexFlow: "column nowrap" }}
                 >
                   {messages.map((message, i) => {
@@ -289,7 +289,7 @@ function App() {
                     return (
                       <div
                         key={i}
-                        className={cn("text-white w-fit max-w-[48%] my-2", {
+                        className={cn("text-white w-fit max-w-[90%] md:max-w-[48%] my-2", {
                           "self-end flex items-end flex-col": isUserMessage,
                           "mt-auto": i === 0,
                         })}
@@ -381,7 +381,7 @@ function App() {
 
                 <form
                   onSubmit={handleSumbit}
-                  className="mx-auto mt-5 w-full md:w-[80%] flex bg-[#7d7979] border border-green-400 items-center rounded-xl px-5"
+                  className="mx-auto mt-5 w-full md:w-[80%] flex bg-gray-400 border-none  items-center rounded-xl px-5"
                 >
                   <TextareaAutosize
                     autoFocus
@@ -414,8 +414,8 @@ function App() {
               className="relative bg-repeat bg-center bg-contain place-items-center text-center align-middle   w-full h-full"
               style={{ backgroundImage: `url(${doodle})` }}
             >
-              <div className="absolute  inset-0 bg-white/94">
-                <div className="border-none mx-auto my-100  place-items-center">
+              <div className="flex w-full h-full justify-center items-center inset-0 bg-white/94">
+                <div className="border-none mx-auto my-100  ">
                   {" "}
                   <StartChatButton />
                 </div>
