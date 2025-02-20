@@ -211,7 +211,13 @@ function App() {
   return (
     <div className="w-screen h-screen flex flex-col">
       <header className="w-full">
-        <nav className="bg-[#daf2e2] flex justify-between p-2 px-10">
+        <nav className="bg-[#daf2e2] flex justify-start items-center p-2 px-10">
+          <button
+            className="min-w-[40px] min-h-[40px] flex justify-center items-center p-2 my-2 bg-green-300 rounded-lg  group relative"
+            onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+          >
+            <BiMenu />
+          </button>
           <div className="flex">
             <img src={cinta} alt="" className="w-15" />
             <h1
@@ -228,13 +234,14 @@ function App() {
       <div className="flex  w-full h-full">
         {/* side bar starts here  */}
 
-        <nav className="w-full max-w-[250px] bg-gray-100 border-r border-gray-100 p-5">
-          <button
-            className=" p-2 my-2 bg-green-300 rounded-lg  group relative inline-block "
-            onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-          >
-            {isSidebarOpen ? <BiX /> : <BiMenu />}
-          </button>
+        <nav
+          className={cn(
+            "w-full max-w-[250px] transition-all overflow-hidden duration-300 bg-gray-100 border-r border-gray-100 p-5",
+            {
+              "!w-[0px] !max-w-[0px] !p-0": !isSidebarOpen,
+            }
+          )}
+        >
           <StartChatButton block />
           {sessions.map((session) => (
             <button
@@ -374,7 +381,7 @@ function App() {
 
                 <form
                   onSubmit={handleSumbit}
-                  className=" mx-auto mt-5 w-[80%] flex bg-white/70 border border-green-500 items-center rounded-xl px-5 text-white"
+                  className="mx-auto mt-5 w-full md:w-[80%] flex bg-[#7d7979] border border-green-400 items-center rounded-xl px-5"
                 >
                   <TextareaAutosize
                     autoFocus
@@ -386,13 +393,13 @@ function App() {
                     draggable={false}
                     placeholder="Type here.."
                     onChange={(e) => setMessage(e.target.value)}
-                    className="resize-none px-5 text-black py-4 grow text-md focus:ring-0 active:ring-0 focus-visible:ring-0 focus-visible:outline-0"
+                    className="resize-none px-5 py-4 grow text-md focus:ring-0 active:ring-0 focus-visible:ring-0 focus-visible:outline-0 text-white placeholder:text-white"
                   />
                   <button
                     disabled={
                       prompting || detecting || summarizing || translating
                     }
-                    className="cursor-pointer text-black"
+                    className="cursor-pointer text-white"
                     type="submit"
                   >
                     <BiSend size={35} />
