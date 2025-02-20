@@ -8,13 +8,21 @@ import { useSummarizer } from "./hooks/useSummarizer";
 import { v4 } from "uuid";
 import { useTranslator } from "./hooks/useTranslator";
 import { useEffect } from "react";
-import { BiTrash } from "react-icons/bi";
+import { BiTrash, BiX, BiMenu, BiSend } from "react-icons/bi";
 import cinta from "./assets/cinta.png";
 import doodle from "./assets/doodle.png";
 import sendIcon from "./assets/message.png";
 import sidebar from "./assets/sidebar.png";
 
-const languages = ["en", "pt", "es"];
+const languages = ["en", "pt", "es", "ru", "tr", "fr"];
+const languageMap = {
+  en: "English",
+  pt: "Portuguese",
+  es: "Spanish",
+  ru: "Russian",
+  tr: "Turkish",
+  fr: "French",
+};
 const messagesStorageKey = "cintabot::messages";
 const sessionsStorageKey = "cintabot::sessions";
 const activeSessionStorageKey = "cintabot::activeSession";
@@ -45,7 +53,7 @@ const getActiveSession = () => {
 };
 
 function App() {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true); 
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [sessions, setSession] = useState(getDefaultSessions());
   const [activeSession, setActiveSession] = useState(getActiveSession());
   const [messages, setMessages] = useState(getSessionMessages(activeSession));
@@ -191,7 +199,7 @@ function App() {
       <button
         onClick={handleNewChatCreation}
         className={cn(
-          "p-4 text-left  text-white text-sm flex justify-between items-center bg-blue-400 rounded-lg cursor-pointer mb-4",
+          "p-4 text-left  text-black text-sm flex justify-between items-center bg-green-200 rounded-lg cursor-pointer mb-4",
           { "w-full ": block }
         )}
       >
@@ -201,8 +209,8 @@ function App() {
   };
 
   return (
-    <>
-      <header className="w-screen h-1/3">
+    <div className="w-screen h-screen flex flex-col">
+      <header className="w-full">
         <nav className="bg-[#daf2e2] flex justify-between p-2 px-10">
           <div className="flex">
             <img src={cinta} alt="" className="w-15" />
@@ -217,18 +225,15 @@ function App() {
         </nav>
       </header>
 
-      <div className="flex  w-screen h-[720px]">
+      <div className="flex  w-full h-full">
         {/* side bar starts here  */}
 
         <nav className="w-full max-w-[250px] bg-gray-100 border-r border-gray-100 p-5">
           <button
-            className=" p-2 my-2  group relative inline-block "
+            className=" p-2 my-2 bg-green-300 rounded-lg  group relative inline-block "
             onClick={() => setIsSidebarOpen(!isSidebarOpen)}
           >
-            <img src={sidebar} alt="" title="Toggle Sidebar" className="w-9" />
-            <span className="hidden group-hover:inline-block absolute top-2 left-27 -translate-x-1/2 bg-gray-700 text-white text-sm px-2 py-1 rounded mt-2 whitespace-nowrap">
-              Toggle Sidebar
-            </span>
+            {isSidebarOpen ? <BiX /> : <BiMenu />}
           </button>
           <StartChatButton block />
           {sessions.map((session) => (
@@ -236,7 +241,7 @@ function App() {
               key={session.id}
               onClick={() => handleSessionSwitch(session.id)}
               className={cn(
-                "w-full transition-all duration-300 p-4 text-left text-white text-sm flex justify-between items-center border bg-gray-500  rounded-lg cursor-pointer mb-4 hover:opacity-70",
+                "w-full transition-all duration-300 p-4 text-left text-black text-sm flex justify-between items-center border border-green-300 bg-[#daf2e2]  rounded-lg cursor-pointer mb-4 hover:opacity-70",
                 {
                   "!border-2": activeSession === session.id,
                 }
@@ -245,7 +250,7 @@ function App() {
               <span className="max-w-[90%] truncate">{session.name}</span>
               <span
                 onClick={(e) => deleteSession(e, session.id)}
-                className="w-[20px] h-[20px] bg-[#162244] flex justify-center items-center leading-0 p-1 cursor-pointer rounded-[4px]"
+                className="w-[20px] h-[20px] bg-green-300/50 flex justify-center items-center leading-0 p-1 cursor-pointer rounded-[4px]"
               >
                 <BiTrash />
               </span>
@@ -277,16 +282,17 @@ function App() {
                     return (
                       <div
                         key={i}
-                        className={cn("text-white b  w-fit max-w-[48%] my-2", {
+                        className={cn("text-white w-fit max-w-[48%] my-2", {
                           "self-end flex items-end flex-col": isUserMessage,
                           "mt-auto": i === 0,
                         })}
                       >
                         <div
                           className={cn(
-                            "text-sm py-2.5 bg-black/70 border border-blue-900 rounded-lg px-3 w-full",
+                            "text-sm py-2.5 bg-gray-100 text-black border border-green-500 rounded-lg px-3 w-full",
                             {
-                              "!border-red-800 bg-red-500": message.isError,
+                              "!border-red-800 bg-red-500 !text-white":
+                                message.isError,
                             }
                           )}
                         >
@@ -310,13 +316,13 @@ function App() {
                               <button
                                 disabled={summarizing}
                                 onClick={() => handleSummarize(message.text)}
-                                className="text-[10px] py-1 px-2 bg-blue-400 rounded-lg cursor-pointer"
+                                className="text-[10px] py-1 px-2 bg-green-200 rounded-lg cursor-pointer"
                               >
                                 Summarize
                               </button>
                             )}
                             {showTranslator && (
-                              <div className="text-black flex items-center gap-3 border border-blue-400 rounded-lg pl-2 overflow-hidden">
+                              <div className="text-black flex items-center gap-3 border border-green-200 rounded-lg pl-2 overflow-hidden">
                                 <select
                                   defaultValue={message.detectedLanguage}
                                   onChange={(e) =>
@@ -329,13 +335,13 @@ function App() {
                                 >
                                   {languages.map((lang) => (
                                     <option value={lang} key={lang}>
-                                      {lang.toUpperCase()}
+                                      {languageMap[lang]}
                                     </option>
                                   ))}
                                 </select>
                                 <button
                                   onClick={() => handleTranslate(message.id)}
-                                  className="text-[10px] py-1 px-2 bg-blue-400 cursor-pointer"
+                                  className="text-[10px] py-1 px-2 bg-green-200 cursor-pointer"
                                 >
                                   Translate
                                 </button>
@@ -349,7 +355,7 @@ function App() {
                   {(prompting || detecting || summarizing || translating) && (
                     <div className="text-white  flex items-center gap-1.5 text-sm">
                       <span className="relative flex size-3">
-                        <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-sky-400 opacity-75"></span>
+                        <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-sky-200 opacity-75"></span>
                         <span className="relative inline-flex size-3 rounded-full bg-sky-500"></span>
                       </span>
                       <span>
@@ -368,7 +374,7 @@ function App() {
 
                 <form
                   onSubmit={handleSumbit}
-                  className="w-10/12 mx-auto flex  bg-[#5f9370] border  items-center rounded-xl px-5 py-4 text-white"
+                  className=" mx-auto mt-5 w-[80%] flex bg-white/70 border border-green-500 items-center rounded-xl px-5 text-white"
                 >
                   <TextareaAutosize
                     autoFocus
@@ -380,23 +386,23 @@ function App() {
                     draggable={false}
                     placeholder="Type here.."
                     onChange={(e) => setMessage(e.target.value)}
-                    className="resize-none px-5 py-3 grow text-md focus:ring-0 active:ring-0 focus-visible:ring-0 focus-visible:outline-0"
+                    className="resize-none px-5 text-black py-4 grow text-md focus:ring-0 active:ring-0 focus-visible:ring-0 focus-visible:outline-0"
                   />
                   <button
                     disabled={
                       prompting || detecting || summarizing || translating
                     }
-                    className="cursor-pointer"
+                    className="cursor-pointer text-black"
                     type="submit"
                   >
-                    <img src={sendIcon} alt="" className="w-7 " />
+                    <BiSend size={35} />
                   </button>
                 </form>
               </div>
             </div>
           </div>
         ) : (
-          <div className="   w-full h-full flex justify-center items-center">
+          <div className=" w-full h-full flex justify-center items-center">
             <div
               className="relative bg-repeat bg-center bg-contain place-items-center text-center align-middle   w-full h-full"
               style={{ backgroundImage: `url(${doodle})` }}
@@ -411,7 +417,7 @@ function App() {
           </div>
         )}
       </div>
-    </>
+    </div>
   );
 }
 
