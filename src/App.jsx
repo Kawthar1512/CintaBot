@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState,useRef } from "react";
+
 import cn from "classnames";
 import TextareaAutosize from "react-textarea-autosize";
 import { usePrompt } from "./hooks/usePrompt";
@@ -53,6 +54,7 @@ const getActiveSession = () => {
 };
 
 function App() {
+  const form = useRef()
   const [isSidebarOpen, setIsSidebarOpen] = useState(window.innerWidth >= 1024);
   const [sessions, setSession] = useState(getDefaultSessions());
   const [activeSession, setActiveSession] = useState(getActiveSession());
@@ -275,7 +277,7 @@ function App() {
             <div className="absolute inset-0 bg-white/94">
               <div className=" flex w-full h-full flex-col p-5">
                 <div
-                  className="w-full grow h-fit md:p-5 overflow-y-auto flex"
+                  className="w-full grow h-fit md:p-5 no-scrollbar overflow-y-auto flex"
                   style={{ flexFlow: "column nowrap" }}
                 >
                   {messages.map((message, i) => {
@@ -380,6 +382,7 @@ function App() {
                 </div>
 
                 <form
+                  ref={form}
                   onSubmit={handleSumbit}
                   className="mx-auto mt-5 w-full md:w-[80%] flex bg-gray-400 border-none  items-center rounded-xl px-5"
                 >
@@ -393,7 +396,13 @@ function App() {
                     draggable={false}
                     placeholder="Type here.."
                     onChange={(e) => setMessage(e.target.value)}
-                    className="resize-none px-5 py-4 grow text-md focus:ring-0 active:ring-0 focus-visible:ring-0 focus-visible:outline-0 text-white placeholder:text-white"
+                    onKeyPress={e => {
+                      if(e.key === "Enter") {
+                        console.log("Submitting...")
+                        form.current.requestSubmit();
+                      }
+                    }}
+                    className="resize-none px-5 py-4 grow text-md focus:ring-0 active:ring-0 focus-visible:ring-0 focus-visible:outline-0 text-white placeholder:text-white no-scrollbar"
                   />
                   <button
                     disabled={
