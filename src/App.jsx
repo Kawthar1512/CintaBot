@@ -1,4 +1,4 @@
-import { useState,useRef } from "react";
+import { useState, useRef } from "react";
 
 import cn from "classnames";
 import TextareaAutosize from "react-textarea-autosize";
@@ -12,7 +12,7 @@ import { useEffect } from "react";
 import { BiTrash, BiX, BiMenu, BiSend } from "react-icons/bi";
 import cinta from "./assets/cinta.png";
 import doodle from "./assets/doodle.png";
-
+import LandPage from "./components/Loader";
 
 const languages = ["en", "pt", "es", "ru", "tr", "fr"];
 const languageMap = {
@@ -53,7 +53,7 @@ const getActiveSession = () => {
 };
 
 function App() {
-  const form = useRef()
+  const form = useRef();
   const [isSidebarOpen, setIsSidebarOpen] = useState(window.innerWidth >= 1024);
   const [sessions, setSession] = useState(getDefaultSessions());
   const [activeSession, setActiveSession] = useState(getActiveSession());
@@ -156,7 +156,7 @@ function App() {
     setTimeout(async () => {
       const sessionMessages = getSessionMessages(sessionId);
 
-      if (sessionMessages.filter((s) => s.role === "assistant").length <= 2) {
+      if (sessionMessages.filter((s) => s.role === "assistant").length <= 1) {
         console.log("Cant update name yet, retrying in 5 seconds");
         return updateSessionName(sessionId);
       }
@@ -290,10 +290,13 @@ function App() {
                     return (
                       <div
                         key={i}
-                        className={cn("text-white w-fit max-w-[90%] md:max-w-[48%] my-2", {
-                          "self-end flex items-end flex-col": isUserMessage,
-                          "mt-auto": i === 0,
-                        })}
+                        className={cn(
+                          "text-white w-fit max-w-[90%] md:max-w-[48%] my-2",
+                          {
+                            "self-end flex items-end flex-col": isUserMessage,
+                            "mt-auto": i === 0,
+                          }
+                        )}
                       >
                         <div
                           className={cn(
@@ -395,9 +398,9 @@ function App() {
                     draggable={false}
                     placeholder="Type here.."
                     onChange={(e) => setMessage(e.target.value)}
-                    onKeyPress={e => {
-                      if(e.key === "Enter") {
-                        console.log("Submitting...")
+                    onKeyPress={(e) => {
+                      if (e.key === "Enter") {
+                        console.log("Submitting...");
                         form.current.requestSubmit();
                       }
                     }}
