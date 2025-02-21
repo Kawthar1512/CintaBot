@@ -12,8 +12,7 @@ import { useEffect } from "react";
 import { BiTrash, BiX, BiMenu, BiSend } from "react-icons/bi";
 import cinta from "./assets/cinta.png";
 import doodle from "./assets/doodle.png";
-import sendIcon from "./assets/message.png";
-import sidebar from "./assets/sidebar.png";
+
 
 const languages = ["en", "pt", "es", "ru", "tr", "fr"];
 const languageMap = {
