@@ -300,7 +300,7 @@ function App() {
                       >
                         <div
                           className={cn(
-                            "text-sm py-2.5 bg-gray-100 text-black border border-green-500 rounded-lg px-3 w-full",
+                            "text-sm py-2.5 bg-gray-100 break-words text-black border border-green-500 rounded-lg px-3 w-full",
                             {
                               "!border-red-800 bg-red-500 !text-white":
                                 message.isError,
